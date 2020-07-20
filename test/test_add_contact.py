@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from add_user import User
-from application import Application
+from model.add_user import User
+from fixture.application import Application
 import pytest
 
 
