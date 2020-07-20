@@ -11,7 +11,8 @@ class TestAddGroup(unittest.TestCase):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
 
-    def login(self, wd, username, password):
+    def login(self, username, password):
+        wd = self.wd
         # open home page
         wd.get("http://localhost/addressbook/group.php")
         # login in site (admin/secret)
@@ -23,7 +24,8 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_name("pass").send_keys(password)
         wd.find_element_by_xpath("//input[@value='Login']").click()
 
-    def create_group(self, wd, group):
+    def create_group(self, group):
+        wd = self.wd
         # open group page
         wd.find_element_by_link_text("groups").click()
         # input group creation
@@ -43,21 +45,21 @@ class TestAddGroup(unittest.TestCase):
         # return to group page
         wd.find_element_by_link_text("group page").click()
 
-    def logout(self, wd):
+    def logout(self):
+        wd = self.wd
         # logout
         wd.find_element_by_link_text("Logout").click()
 
     def test_add_group(self):
-        wd = self.wd
-        self.login(wd, username = "admin", password = "secret")
-        self.create_group(wd, Group(name = "123", header = "qwerty", footer = "asdfgh"))
-        self.logout(wd)
+        self.login(username = "admin", password = "secret")
+        self.create_group(Group(name = "123", header = "qwerty", footer = "asdfgh"))
+        self.logout()
 
     def test_add_empty_group(self):
         wd = self.wd
-        self.login(wd, username = "admin", password = "secret")
-        self.create_group(wd, Group(name = "", header = "", footer = ""))
-        self.logout(wd)
+        self.login(username = "admin", password = "secret")
+        self.create_group(Group(name = "", header = "", footer = ""))
+        self.logout()
 
     def is_element_present(self, how, what):
         try:
