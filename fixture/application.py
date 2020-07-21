@@ -8,7 +8,7 @@ class Application:
         self.wd.implicitly_wait(30)
         self.session = SessionHelper(self)
 
-    def create_group(self, group):
+    def create(self, group):
         wd = self.wd
         # open group page
         wd.find_element_by_link_text("groups").click()
