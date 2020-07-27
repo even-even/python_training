@@ -58,7 +58,7 @@ class UserHelper:
         # return Home page
         wd.find_element_by_link_text("home page").click()
 
-    def delete_user(self):
+    def delete_first_user(self):
         wd = self.app.wd
 
         # click home
