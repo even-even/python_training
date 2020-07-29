@@ -5,7 +5,7 @@ class GroupHelper:
     def create(self, group):
         wd = self.app.wd
         # open group page
-        wd.find_element_by_link_text("groups").click()
+        self.open_group_page()
         # input group creation
         wd.find_element_by_name("new").click()
         # fill group form
@@ -57,3 +57,8 @@ class GroupHelper:
 
         # return to group page
         wd.find_element_by_link_text("group page").click()
+
+    def count(self):
+        wd = self.app.wd
+        self.open_group_page()
+        return len(wd.find_elements_by_name("selected[]"))
