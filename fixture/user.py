@@ -47,12 +47,14 @@ class UserHelper:
 
     def open_home_page(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("home").click()
+        if not wd.current_url.endswith("/index.php"):
+            wd.find_element_by_link_text("home").click()
 
     def return_home_page(self):
         wd = self.app.wd
         # return Home page
-        wd.find_element_by_link_text("home page").click()
+        if not wd.current_url.endswith("/index.php"):
+            wd.find_element_by_link_text("home page").click()
 
     def edit_user(self, new_user_data):
         wd = self.app.wd
