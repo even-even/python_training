@@ -43,35 +43,43 @@ class UserHelper:
         self.edit_userInfo(user)
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         # return Home page
+        self.return_home_page()
+
+    def open_home_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("home").click()
+
+    def return_home_page(self):
+        wd = self.app.wd
+        # return Home page
         wd.find_element_by_link_text("home page").click()
 
     def edit_user(self, new_user_data):
         wd = self.app.wd
 
         # click home
-        wd.find_element_by_link_text("home").click()
-
+        self.open_home_page()
         # edit user
         wd.find_element(By.XPATH, "//img[@alt=\'Edit\']").click()
         self.edit_userInfo(new_user_data)
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
         # return Home page
-        wd.find_element_by_link_text("home page").click()
+        self.return_home_page()
 
     def delete_first_user(self):
         wd = self.app.wd
 
         # click home
-        wd.find_element_by_link_text("home").click()
+        self.open_home_page()
         # check 1st element and delete it
         wd.find_element_by_name("selected[]").click()
         wd.find_element(By.XPATH, "//input[@value=\'Delete\']").click()
         assert wd.switch_to.alert.text == "Delete 1 addresses?"
         wd.switch_to.alert.accept()
 
-        wd.find_element(By.LINK_TEXT, "home").click()
+        self.open_home_page()
 
     def count(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("home").click()
+        self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
