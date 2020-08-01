@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from model.user import User
 
 
 class UserHelper:
@@ -85,3 +86,13 @@ class UserHelper:
         wd = self.app.wd
         self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_user_list(self):
+        wd = self.app.wd
+        self.open_home_page()
+        user_list = []
+        for element in wd.find_elements_by_name("entry"):
+            text = element.find_element_by_name("selected[]").get_attribute("title")
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            user_list.append(User(name=text, id=id))
+        return user_list
