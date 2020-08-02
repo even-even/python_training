@@ -45,6 +45,7 @@ class UserHelper:
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         # return Home page
         self.return_home_page()
+        self.user_cache = None
 
     def open_home_page(self):
         wd = self.app.wd
@@ -68,6 +69,7 @@ class UserHelper:
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
         # return Home page
         self.return_home_page()
+        self.user_cache = None
 
     def delete_first_user(self):
         wd = self.app.wd
@@ -79,20 +81,24 @@ class UserHelper:
         wd.find_element(By.XPATH, "//input[@value=\'Delete\']").click()
         assert wd.switch_to.alert.text == "Delete 1 addresses?"
         wd.switch_to.alert.accept()
-
+        wd.find_elements_by_css_selector("div.msgbox")
         self.open_home_page()
+        self.user_cache = None
 
     def count(self):
         wd = self.app.wd
         self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    user_cache = None
+
     def get_user_list(self):
-        wd = self.app.wd
-        self.open_home_page()
-        user_list = []
-        for element in wd.find_elements_by_name("entry"):
-            text = element.find_element_by_name("selected[]").get_attribute("title")
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            user_list.append(User(name=text, id=id))
-        return user_list
+        if self.user_cache is None:
+            wd = self.app.wd
+            self.open_home_page()
+            self.user_cache = []
+            for element in wd.find_elements_by_name("entry"):
+                text = element.find_element_by_name("selected[]").get_attribute("title")
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.user_cache.append(User(name=text, id=id))
+        return list(self.user_cache)
