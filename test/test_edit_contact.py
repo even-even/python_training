@@ -11,7 +11,7 @@ def test_edit_user(app):
                 phone2 = "edit17", notes = "edit18")
     user.id = old_users[0].id
     app.user.edit_user(user)
-    new_users = app.user.get_user_list()
     assert len(old_users) == app.user.count()
+    new_users = app.user.get_user_list()
     old_users[0] = user
     assert sorted(old_users, key=User.id_or_max) == sorted(new_users, key=User.id_or_max)
