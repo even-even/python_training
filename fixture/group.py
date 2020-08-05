@@ -19,6 +19,19 @@ class GroupHelper:
         wd.find_element_by_link_text("group page").click()
         self.group_cache = None
 
+    def open_group_page(self):
+        wd = self.app.wd
+        if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
+            wd.find_element_by_link_text("groups").click()
+
+    def select_first_group(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+
+    def select_group_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
+
     def change_field_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
@@ -35,35 +48,28 @@ class GroupHelper:
         self.change_field_value("group_footer", group.footer)
         self.group_cache = None
 
-    def delete_first_group(self):
+    def delete_group_by_index(self, index):
         wd = self.app.wd
         self.open_group_page()
-        self.select_first_group()
+        self.select_group_by_index(index)
         wd.find_element_by_name("delete").click()
         self.group_cache = None
 
-    def select_first_group(self):
-        wd = self.app.wd
-        wd.find_element_by_name("selected[]").click()
+    def delete_first_group(self):
+        self.delete_group_by_index(0)
 
-    def open_group_page(self):
+    def edit_group_by_index(self, index, new_group_data):
         wd = self.app.wd
-        if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
-            wd.find_element_by_link_text("groups").click()
-
-    def edit_first_group(self, new_group_data):
-        wd = self.app.wd
-
         self.open_group_page()
-
-        self.select_first_group()
+        self.select_group_by_index(index)
         wd.find_element_by_name("edit").click()
-
         self.edit_groupInfo(new_group_data)
         wd.find_element_by_name("update").click()
-
         # return to group page
         wd.find_element_by_link_text("group page").click()
+
+    def edit_first_group(self):
+        self.edit_group_by_index(0)
 
     def count(self):
         wd = self.app.wd

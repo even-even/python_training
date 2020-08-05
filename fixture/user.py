@@ -58,32 +58,41 @@ class UserHelper:
         if not wd.current_url.endswith("/index.php"):
             wd.find_element_by_link_text("home page").click()
 
-    def edit_user(self, new_user_data):
+    def select_element_by_index(self, index):
         wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
 
-        # click home
+    def edit_user_by_index(self, index, new_user_data):
+        wd = self.app.wd
+        # click add new contact
         self.open_home_page()
+        self.select_element_by_index(index)
         # edit user
-        wd.find_element(By.XPATH, "//img[@alt=\'Edit\']").click()
+        wd.find_element_by_xpath("//img[@alt='Edit']").click()
         self.edit_userInfo(new_user_data)
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
         # return Home page
         self.return_home_page()
         self.user_cache = None
 
-    def delete_first_user(self):
+    def edit_first_user(self, contact):
         wd = self.app.wd
+        self.edit_user_by_index(0, contact)
 
-        # click home
+    def delete_user_by_index(self, index):
+        wd = self.app.wd
+        # click add new contact
         self.open_home_page()
-        # check 1st element and delete it
-        wd.find_element_by_name("selected[]").click()
+        self.select_element_by_index(index)
         wd.find_element(By.XPATH, "//input[@value=\'Delete\']").click()
         assert wd.switch_to.alert.text == "Delete 1 addresses?"
         wd.switch_to.alert.accept()
         wd.find_elements_by_css_selector("div.msgbox")
         self.open_home_page()
         self.user_cache = None
+
+    def delete_first_user(self):
+        self.delete_user_by_index(0)
 
     def count(self):
         wd = self.app.wd
