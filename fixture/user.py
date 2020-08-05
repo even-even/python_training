@@ -68,7 +68,7 @@ class UserHelper:
         self.open_home_page()
         self.select_element_by_index(index)
         # edit user
-        wd.find_element_by_xpath("//img[@alt='Edit']").click()
+        wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
         self.edit_userInfo(new_user_data)
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
         # return Home page
@@ -108,6 +108,9 @@ class UserHelper:
             self.user_cache = []
             for element in wd.find_elements_by_name("entry"):
                 text = element.find_element_by_name("selected[]").get_attribute("title")
+                lastname = wd.find_elements_by_tag_name("td")[1]
+                firstname = wd.find_elements_by_tag_name("td")[2]
                 id = element.find_element_by_name("selected[]").get_attribute("value")
-                self.user_cache.append(User(name=text, id=id))
+                self.user_cache.append(User(name=text, id=id, lastname=lastname, firstname=firstname))
         return list(self.user_cache)
+
