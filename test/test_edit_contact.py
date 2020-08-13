@@ -1,19 +1,16 @@
-from model.user import User
+from model.contact import Contact
 from random import randrange
 
 
-def test_edit_user(app):
-    if app.user.count() == 0:
-        app.user.create_user(User(firstname = "user_for_edit"))
-    old_users = app.user.get_user_list()
-    index = randrange(len(old_users))
-    user = User(firstname = "edit1", middlename = "edit2", lastname = "edit3", nickname = "edit4", title = "edit5",
-                company = "edit6", address = "edit7", home = "edit8", mobile = "edit9", work = "edit10", fax = "edit11",
-                email = "edit12", email2 = "edit13", email3 = "edit14", homepage = "edit15", address2 = "edit16",
-                phone2 = "edit17", notes = "edit18")
-    user.id = old_users[index].id
-    app.user.edit_user_by_index(index, user)
-    assert len(old_users) == app.user.count()
-    new_users = app.user.get_user_list()
-    old_users[index] = user
-    assert sorted(old_users, key=User.id_or_max) == sorted(new_users, key=User.id_or_max)
+def test_edit_contact(app):
+    if app.contact.count() == 0:
+        app.contact.create_new_contact(Contact(firstname = "test"))
+    contact = Contact(firstname = "new3")
+    old_contacts = app.contact.get_contact_list()
+    index = randrange(len(old_contacts))
+    contact.id = old_contacts[index].id
+    app.contact.edit_contact_by_index(index, contact)
+    assert len(old_contacts) == app.contact.count()
+    new_contacts = app.contact.get_contact_list()
+    old_contacts[index] = contact
+    assert sorted(old_contacts, key = Contact.id_or_max) == sorted(new_contacts, key = Contact.id_or_max)
