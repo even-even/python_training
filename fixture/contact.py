@@ -1,5 +1,6 @@
 from selenium.webdriver.support.select import Select
 from model.contact import Contact
+import re
 
 
 class ContactHelper:
@@ -122,9 +123,9 @@ class ContactHelper:
                 firstname = cells[2].text
                 address = cells[3].text
                 all_email = cells[4].text
-                id = cells[0].find_element_by_name("selected[]").get_attribute("value")
+                id = cells[0].find_element_by_tag_name("input").get_attribute("value")
                 all_phones = cells[5].text
-                self.contact_list.append(Contact(id = id, lastname = lastname, firstname = firstname,
+                self.contact_list.append(Contact(id = id, firstname = firstname, lastname = lastname,
                                                  all_phones_from_home_page = all_phones, address = address,
                                                  email = all_email))
         return list(self.contact_list)
@@ -139,25 +140,24 @@ class ContactHelper:
         home = wd.find_element_by_name("home").get_attribute("value")
         mobile = wd.find_element_by_name("mobile").get_attribute("value")
         work = wd.find_element_by_name("work").get_attribute("value")
+        phone2 = wd.find_element_by_name("phone2").get_attribute("value")
         email = wd.find_element_by_name("email").get_attribute("value")
         email2 = wd.find_element_by_name("email2").get_attribute("value")
         email3 = wd.find_element_by_name("email3").get_attribute("value")
         return Contact(firstname = firstname, lastname = lastname, id = id, address = address, home = home,
-                       mobile = mobile,
-                       work = work, email = email, email2 = email2,
-                       email3 = email3)
+                       mobile = mobile, phone2 = phone2, work = work,
+                       email = email, email2 = email2, email3 = email3)
 
     def get_contact_from_view_page(self, index):
         wd = self.app.wd
         self.open_contact_view_by_index(index)
         text = wd.find_element_by_id("content").text
-        lastname = text[1].text
-        firstname = text[2].text
-        address = text[3].text
-        all_emails = text[4].text
-        all_phones = text[5].text
-        return Contact(firstname = firstname, lastname = lastname, id = id, address = address,
-                       all_phones_from_home_page = all_phones, email = all_emails)
+        home = re.search("H: (.*)", text).group(1)
+        work = re.search("W: (.*)", text).group(1)
+        mobile = re.search("M: (.*)", text).group(1)
+        phone2 = re.search("P: (.*)", text).group(1)
+        return Contact(home=home, work=work,
+                       mobile=mobile, phone2=phone2)
 
     def open_contact_to_edit_by_index(self, index):
         wd = self.app.wd
