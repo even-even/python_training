@@ -32,7 +32,7 @@ class Contact:
         self.all_info_from_home_page = all_info_from_home_page
 
     def __repr__(self):
-        return "%s:%s %s" % (self.id, self.firstname, self.lastname)
+        return "%s:%s:%s:%s:%s:%s:%s:%s" % (self.id, self.firstname, self.lastname, self.middlename, self.nickname, self.company, self.address, self.email)
 
     def __eq__(self, other):
         return (self.id is None or other.id is None or self.id == other.id) and \
