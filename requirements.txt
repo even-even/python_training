@@ -1,2 +1,5 @@
 selenium
 pytest
+os
+os.path
+shutil
