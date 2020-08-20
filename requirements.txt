@@ -3,3 +3,4 @@ pytest
 os
 os.path
 shutil
+jsonpickle
