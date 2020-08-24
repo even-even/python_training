@@ -25,15 +25,16 @@ def app(request):
     browser = request.config.getoption("--browser")
     web_config = load_config(request.config.getoption("--target"))['web']
     if fixture is None or not fixture.is_valid():
-        fixture = Application(browser=browser, base_url=web_config['baseUrl'])
-    fixture.session.ensure_login(username=web_config['username'], password=web_config['password'])
+        fixture = Application(browser = browser, base_url = web_config['baseUrl'])
+    fixture.session.ensure_login(username = web_config['username'], password = web_config['password'])
     return fixture
 
 
 @pytest.fixture(scope = "session")
 def db(request):
     db_config = load_config(request.config.getoption("--target"))['db']
-    dbfixture = DbFixture(host=db_config['host'], name=db_config['name'], user=db_config['user'], password=db_config['password'])
+    dbfixture = DbFixture(host = db_config['host'], name = db_config['name'], user = db_config['user'],
+                          password = db_config['password'])
 
     def fin():
         dbfixture.destroy()
@@ -52,9 +53,15 @@ def stop(request):
     return fixture
 
 
+@pytest.fixture()
+def check_ui(request):
+    return request.config.getoption("--check_ui")
+
+
 def pytest_addoption(parser):
     parser.addoption("--browser", action = "store", default = "firefox")
     parser.addoption("--target", action = "store", default = "target.json")
+    parser.addoption("--check_ui", action = "store_true")
 
 
 def pytest_generate_tests(metafunc):
